@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react"
+import { Amplify } from "aws-amplify";
+import { Authenticator } from "@aws-amplify/ui-react";
+import '@aws-amplify/ui-react/styles.css'
 
-function App() {
+import awsExports from "./aws-exports"
+
+Amplify.configure(awsExports)
+
+const App = () => {
+  const [isLogged, setIsLogged] = useState(false)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <section>
+      <h1 style={{ textAlign: "center"}}>
+        AWS GRAPHQL Todo React App
+      </h1>
+      <Authenticator>
+        {({ user, signOut, ...params }) => {
+
+          console.log({ user, params, signOut })
+
+          return (
+            <main>
+              <h1>Welcome {user.username}</h1>
+              <button onClick={signOut}>Sign out</button>
+            </main>
+          )
+        }}
+      </Authenticator>
+    </section>
+  )
 }
 
-export default App;
+export default App
